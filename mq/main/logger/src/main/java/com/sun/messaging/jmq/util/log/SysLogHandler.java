@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+// Portions Copyright [2016-2017] [Payara Foundation and/or its affiliates]
 
 /*
  * @(#)SysLogHandler.java	1.5 06/29/07
@@ -102,14 +103,16 @@ public class SysLogHandler extends Handler {
     	} catch (UnsatisfiedLinkError e) {
     		java.util.logging.Logger logger =
     		java.util.logging.Logger.getLogger(Logger.LOGGERNAME);
-    		logger.log(Level.WARNING, SharedResources.getResources()
+            // Changed to log as Info instead of Warning
+            logger.log(Level.INFO, SharedResources.getResources()
     				.getKString(SharedResources.W_LOGCHANNEL_DISABLED,
                   this.getClass().getName(), e.getMessage()));
     		open = false;
     	} catch (NoClassDefFoundError e) {
     		java.util.logging.Logger logger =
     		java.util.logging.Logger.getLogger(Logger.LOGGERNAME);
-    		logger.log(Level.WARNING, SharedResources.getResources()
+            // Changed to log as Info instead of Warning
+    		logger.log(Level.INFO, SharedResources.getResources()
     				.getKString(SharedResources.W_LOGCHANNEL_DISABLED,
                   this.getClass().getName(), e.getMessage()));
     		open = false;
@@ -135,14 +138,16 @@ public class SysLogHandler extends Handler {
     	} catch (UnsatisfiedLinkError e) {
     		java.util.logging.Logger logger =
     		java.util.logging.Logger.getLogger(Logger.LOGGERNAME);
-    		logger.log(Level.WARNING, SharedResources.getResources()
+            // Changed to log as Info instead of Warning
+    		logger.log(Level.INFO, SharedResources.getResources()
     				.getKString(SharedResources.W_LOGCHANNEL_DISABLED,
                   this.getClass().getName(), e.getMessage()));
     		open = false;
     	} catch (NoClassDefFoundError e) {
     		java.util.logging.Logger logger =
     		java.util.logging.Logger.getLogger(Logger.LOGGERNAME);
-    		logger.log(Level.WARNING, SharedResources.getResources()
+            // Changed to log as Info instead of Warning
+    		logger.log(Level.INFO, SharedResources.getResources()
     				.getKString(SharedResources.W_LOGCHANNEL_DISABLED,
                   this.getClass().getName(), e.getMessage()));
     		open = false;
