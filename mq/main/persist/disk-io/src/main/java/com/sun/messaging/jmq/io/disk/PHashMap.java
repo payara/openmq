@@ -393,11 +393,16 @@ public class PHashMap extends ConcurrentHashMap {
 	return set;
     }
 
-    @Override
-    public ConcurrentHashMap.KeySetView keySet() {
+    public Set keySet() {
 	checkLoaded();
 
-	return super.keySet();
+	Set set = keySet;
+        if (set == null) {
+            keySet = new HashSet(super.keySet());
+            set = keySet;
+        }
+
+	return set;
     }
 
     public VRFileWarning getWarning() {
@@ -434,6 +439,7 @@ public class PHashMap extends ConcurrentHashMap {
     // Views: key set, entry set, and value collection
 
     private Set entrySet = null;
+    private Set keySet = null;
     private Collection values = null;
 
     private void removeFromFile(Object key) throws IOException {
