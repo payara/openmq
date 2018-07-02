@@ -54,7 +54,7 @@
     <groupId>org.glassfish.mq</groupId>
     <artifactId>mq</artifactId>
     <packaging>pom</packaging>
-    <version> 5.1.1-SNAPSHOT </version>
+    <version>5.1.1.final.payara-p4</version>
     <name>MQ Main Project</name>
 
     <scm>
@@ -67,7 +67,7 @@
 
     <properties>
 	<!-- Change these for each build -->
-	<build.number>6</build.number>
+	<build.number>7</build.number>
         <build.letter>a</build.letter>
 
 	<!-- Product-specific -->
