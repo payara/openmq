@@ -127,7 +127,8 @@ class DestinationDAOImpl extends BaseDAOImpl implements DestinationDAO {
             .toString();
 
         deleteBySessionSQL = new StringBuffer(128)
-            .append( "DELETE FROM " ).append( tableName )
+            .append( "DELETE " ).append( tableName )
+            .append( " FROM " ).append( tableName )
             .append( " WHERE " )
             .append( ID_COLUMN ).append( " = ?" )
             .append(   " AND " )

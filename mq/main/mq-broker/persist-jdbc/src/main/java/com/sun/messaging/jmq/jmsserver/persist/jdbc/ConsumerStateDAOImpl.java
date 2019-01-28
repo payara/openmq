@@ -184,7 +184,8 @@ class ConsumerStateDAOImpl extends BaseDAOImpl implements ConsumerStateDAO {
             .toString();
 
         deleteByDstSQL = new StringBuffer(128)
-            .append( "DELETE FROM " ).append( tableName )
+            .append( "DELETE " ).append( tableName )
+            .append(" FROM " ).append( tableName )
             .append( " WHERE " )
             .append( MESSAGE_ID_COLUMN ).append( " IN " )
             .append( "(SELECT msgTbl." ).append( MessageDAO.ID_COLUMN )
@@ -202,7 +203,8 @@ class ConsumerStateDAOImpl extends BaseDAOImpl implements ConsumerStateDAO {
             .toString();
 
         deleteByDstBySessionSQL = new StringBuffer(128)
-            .append( "DELETE FROM " ).append( tableName )
+            .append( "DELETE " ).append( tableName )
+            .append( " FROM " ).append( tableName )
             .append( " WHERE " )
             .append( MESSAGE_ID_COLUMN ).append( " IN " )
             .append( "(SELECT msgTbl." ).append( MessageDAO.ID_COLUMN )

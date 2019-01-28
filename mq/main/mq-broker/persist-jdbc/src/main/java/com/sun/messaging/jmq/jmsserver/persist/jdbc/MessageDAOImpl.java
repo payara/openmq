@@ -153,7 +153,8 @@ class MessageDAOImpl extends BaseDAOImpl implements MessageDAO {
             .toString();
 
         deleteByDstSQL = new StringBuffer(128)
-            .append( "DELETE FROM " ).append( tableName )
+            .append( "DELETE " ).append( tableName )
+            .append(" FROM " ).append( tableName )
             .append( " WHERE " )
             .append( DESTINATION_ID_COLUMN ).append( " = ?" )
             .append( " AND " )
@@ -166,7 +167,8 @@ class MessageDAOImpl extends BaseDAOImpl implements MessageDAO {
             .toString();
 
         deleteByDstBySessionSQL = new StringBuffer(128)
-            .append( "DELETE FROM " ).append( tableName )
+            .append( "DELETE " ).append( tableName )
+            .append( " FROM " ).append( tableName )
             .append( " WHERE " )
             .append( DESTINATION_ID_COLUMN ).append( " = ?" )
             .append( " AND " )

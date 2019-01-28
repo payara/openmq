@@ -390,7 +390,8 @@ public abstract class CommBaseDAOImpl implements BaseDAO {
                 .toString();
         } else {
             sql = new StringBuffer(128)
-                .append( "DELETE FROM " ).append( tableName )
+                .append( "DELETE ").append( tableName )
+                .append( " FROM " ).append( tableName )
                 .append( (whereClause != null && whereClause.length() > 0)
                          ? " WHERE " + whereClause : "" )
                 .toString();
