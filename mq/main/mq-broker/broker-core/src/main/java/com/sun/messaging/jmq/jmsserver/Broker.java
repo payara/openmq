@@ -1179,6 +1179,10 @@ public class Broker implements GlobalErrorHandler, CommBroker {
                        Globals.getBrokerResources().getString(
                        BrokerResources.M_CLUSTER_SERVICE_FEATURE)));
         } else {
+            // WORKAROUND - Payara FISH-642
+            // Check whether we should force inProcess and JMSRAManaged to return true so that we don't blow away
+            // logging if an exception occurs during initialisation of the ClusterBroadcast - the logic of falling
+            // back to a non-clustered broker is flawed
             boolean forceManuallyConfigureLogging = Globals.getCommBroker().isInProcessBroker() &&
                     Globals.isJMSRAManagedSpecified();
             try {
@@ -1229,7 +1233,12 @@ public class Broker implements GlobalErrorHandler, CommBroker {
                 }
                 logger.log(Logger.WARNING, BrokerResources.I_USING_NOCLUSTER);
 
+                // WORKAROUND - Payara FISH-642
+                // Force inProcess and JMSRAManaged to return true so that we don't blow away logging.
+                // The logic here of falling back to a non-clustered broker doesn't work since we've already blown
+                // away all configuration by calling Broker.exit() before catching this exception.
                 Globals.setForceManuallyConfigureLogging(forceManuallyConfigureLogging);
+
                 mbus = new com.sun.messaging.jmq.jmsserver.cluster.api.NoCluster();
                 NO_CLUSTER = true;
             } catch (Exception ex) {
