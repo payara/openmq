@@ -1179,6 +1179,8 @@ public class Broker implements GlobalErrorHandler, CommBroker {
                        Globals.getBrokerResources().getString(
                        BrokerResources.M_CLUSTER_SERVICE_FEATURE)));
         } else {
+            boolean forceManuallyConfigureLogging = Globals.getCommBroker().isInProcessBroker() &&
+                    Globals.isJMSRAManagedSpecified();
             try {
                 String cname =  "com.sun.messaging.jmq.jmsserver"
                                  + ".multibroker.ClusterBroadcaster";
@@ -1227,6 +1229,7 @@ public class Broker implements GlobalErrorHandler, CommBroker {
                 }
                 logger.log(Logger.WARNING, BrokerResources.I_USING_NOCLUSTER);
 
+                Globals.setForceManuallyConfigureLogging(forceManuallyConfigureLogging);
                 mbus = new com.sun.messaging.jmq.jmsserver.cluster.api.NoCluster();
                 NO_CLUSTER = true;
             } catch (Exception ex) {

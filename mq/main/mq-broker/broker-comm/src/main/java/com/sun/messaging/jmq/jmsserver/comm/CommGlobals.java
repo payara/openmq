@@ -47,7 +47,7 @@ import java.io.*;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Enumeration;
-import java.net.InetAddress;
+
 import com.sun.messaging.jmq.jmsserver.license.LicenseManager;
 import com.sun.messaging.jmq.jmsserver.license.LicenseBase;
 import com.sun.messaging.jmq.jmsservice.BrokerEvent;
@@ -56,7 +56,6 @@ import com.sun.messaging.jmq.jmsserver.util.BrokerException;
 import com.sun.messaging.jmq.jmsserver.util.LoggerManager;
 import com.sun.messaging.jmq.jmsserver.util.LockFile;
 import com.sun.messaging.jmq.jmsserver.config.BrokerConfig;
-import com.sun.messaging.jmq.jmsserver.config.PropertyUpdateException;
 import com.sun.messaging.jmq.util.log.Logger;
 import com.sun.messaging.jmq.util.BrokerExitCode;
 import com.sun.messaging.jmq.jmsserver.audit.api.MQAuditService;
@@ -137,6 +136,8 @@ public class CommGlobals
 
     private static ServiceLocator habitat = null;
 
+    private static boolean forceManuallyConfigureLogging = false;
+
     public static void cleanupComm()
     {
         br = null;
@@ -158,6 +159,7 @@ public class CommGlobals
 
         commBroker = null;
         habitat = null;
+        forceManuallyConfigureLogging = false;
     }
 
     protected CommGlobals() {
@@ -306,6 +308,10 @@ public class CommGlobals
         commBroker = b;
     }
 
+    public static void setForceManuallyConfigureLogging(boolean manual) {
+        forceManuallyConfigureLogging = manual;
+    }
+
     //------------------------------------------------------------------------
     //--               static methods for the singleton pattern             --
     //------------------------------------------------------------------------
@@ -347,10 +353,17 @@ public class CommGlobals
                     // First thing we do after reading in configuration
                     // is to initialize the Logger
                     Logger l = getLogger();
-                    l.configure(config, IMQ, 
-                                (getCommBroker() == null ? false : getCommBroker().isInProcessBroker()), 
-                                isJMSRAManagedSpecified(), 
+                    if (forceManuallyConfigureLogging) {
+                        l.configure(config, IMQ,
+                                true, true,
                                 (isNucleusManagedBroker() ? habitat:null));
+                    } else {
+                        l.configure(config, IMQ,
+                                (getCommBroker() == null ? false : getCommBroker().isInProcessBroker()),
+                                isJMSRAManagedSpecified(),
+                                (isNucleusManagedBroker() ? habitat:null));
+                    }
+                    
                     // LoggerManager will register as a config listener
                     // to handle dynamic updates to logger properties
                     new LoggerManager(logger, config);
