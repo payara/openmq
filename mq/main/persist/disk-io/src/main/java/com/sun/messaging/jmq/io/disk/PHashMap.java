@@ -393,16 +393,10 @@ public class PHashMap extends ConcurrentHashMap {
 	return set;
     }
 
-    public Set keySet() {
-	checkLoaded();
+    public ConcurrentHashMap.KeySetView keySet() {
+		checkLoaded();
 
-	Set set = keySet;
-        if (set == null) {
-            keySet = new HashSet(super.keySet());
-            set = keySet;
-        }
-
-	return set;
+		return super.keySet();
     }
 
     public VRFileWarning getWarning() {
