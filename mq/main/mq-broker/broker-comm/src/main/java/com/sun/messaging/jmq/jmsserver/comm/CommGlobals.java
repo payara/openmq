@@ -138,10 +138,6 @@ public class CommGlobals
 
     private static ServiceLocator habitat = null;
 
-    // WORKAROUND - Payara FISH-642
-    // Property that forces inProcess and JMSRAManaged to return true when initialising the logger
-    private static boolean forceManuallyConfigureLogging = false;
-
     public static void cleanupComm()
     {
         br = null;
@@ -163,7 +159,6 @@ public class CommGlobals
 
         commBroker = null;
         habitat = null;
-        forceManuallyConfigureLogging = false;
     }
 
     protected CommGlobals() {
@@ -312,17 +307,6 @@ public class CommGlobals
         commBroker = b;
     }
 
-    /**
-     * WORKAROUND - Payara FISH-642
-     * Force inProcess and JMSRAManaged to return true so that we don't blow away logging. This doesn't fix the other
-     * issues that occur during the boot of OpenMQ on a clustered instance that's using a loopback address which need
-     * addressing separately
-     * @param manual Whether to force manual configuration of logging to occur
-     */
-    public static void setForceManuallyConfigureLogging(boolean manual) {
-        forceManuallyConfigureLogging = manual;
-    }
-
     //------------------------------------------------------------------------
     //--               static methods for the singleton pattern             --
     //------------------------------------------------------------------------
@@ -364,21 +348,10 @@ public class CommGlobals
                     // First thing we do after reading in configuration
                     // is to initialize the Logger
                     Logger l = getLogger();
-
-                    if (forceManuallyConfigureLogging) {
-                        // WORKAROUND - Payara FISH-642
-                        // Force inProcess and JMSRAManaged to return true so that we don't blow away logging
-                        // This doesn't fix the other issues that occur during the boot of OpenMQ on a clustered
-                        // instance that's using a loopback address which need addressing separately
-                        l.configure(config, IMQ,
-                                true, true,
-                                (isNucleusManagedBroker() ? habitat:null));
-                    } else {
-                        l.configure(config, IMQ,
-                                (getCommBroker() == null ? false : getCommBroker().isInProcessBroker()),
-                                isJMSRAManagedSpecified(),
-                                (isNucleusManagedBroker() ? habitat:null));
-                    }
+                    l.configure(config, IMQ,
+                            (getCommBroker() == null ? false : getCommBroker().isInProcessBroker()),
+                            isJMSRAManagedSpecified(),
+                            (isNucleusManagedBroker() ? habitat : null));
                     
                     // LoggerManager will register as a config listener
                     // to handle dynamic updates to logger properties
